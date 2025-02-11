@@ -1,12 +1,17 @@
-import { useId } from 'react'
+import { useState, useId } from 'react'
 
-export default function Task({ taskClass, taskStatus, created, isEditing }) {
+export default function Task({ taskStatus, created, isEditing }) {
   const id = useId()
+  const [complete, setComplete] = useState(false)
+
+  const onTaskClick = () => {
+    setComplete(!complete)
+  }
 
   return (
-    <li className={taskClass}>
+    <li className={complete ? 'completed' : ''}>
       <div className="view">
-        <input className="toggle" type="checkbox" id={id} />
+        <input className="toggle" type="checkbox" id={id} onClick={onTaskClick} />
         <label htmlFor={id}>
           <span className="description">{taskStatus}</span>
           <span className="created">{created}</span>
