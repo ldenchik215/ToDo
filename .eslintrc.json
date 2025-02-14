@@ -7,13 +7,16 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-		"airbnb",
-		"airbnb/hooks"
+    "airbnb",
+    "airbnb/hooks",
+    "plugin:prettier/recommended"
   ],
-	"parser": "@babel/eslint-parser",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -25,7 +28,7 @@
   "rules": {
     "indent": ["error", 2],
     "prettier/prettier": [
-      "error", 
+      "warn",
       {
         "endOfLine": "auto"
       }
@@ -37,30 +40,31 @@
     "react/prop-types": 0,
     "import/no-unresolved": [2, { "caseSensitive": false }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-		"react/jsx-one-expression-per-line": "off",
-    "jsx-a11y/label-has-associated-control": [ 2, {
-      "labelComponents": ["CustomLabel"],
-      "labelAttributes": ["inputLabel"],
-      "controlComponents": ["CustomInput"],
-      "assert": "either",
-      "depth": 3
-    }],
-    "object-curly-newline": ["error", {
-      "ObjectExpression": "always",
-      "ObjectPattern": { "multiline": true }
-    }],
+    "react/jsx-one-expression-per-line": "off",
+    "spaced-comment": ["error", "never"],
+    "react/no-array-index-key": "off",
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelComponents": ["CustomLabel"],
+        "labelAttributes": ["inputLabel"],
+        "controlComponents": ["CustomInput"],
+        "assert": "either",
+        "depth": 3
+      }
+    ],
+    "object-curly-newline": [
+      "warn",
+      {
+        "ObjectExpression": "always",
+        "ObjectPattern": { "multiline": true }
+      }
+    ],
     "react/state-in-constructor": [1, "never"],
     "import/order": [
       2,
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
         "newlines-between": "always"
       }
     ]
