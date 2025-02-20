@@ -1,20 +1,34 @@
 import React from 'react'
 
-export default function Task({ text, created, isEditing, isDone, id, onClickDone, onClickEdit, onClickDelete }) {
+export default function Task({
+  text,
+  created,
+  isEditing,
+  isDone,
+  id,
+  onClickDone,
+  onClickEdit,
+  onClickDelete,
+  isVisible,
+}) {
   const taskClasses = []
 
   if (isEditing) {
-    taskClasses.push(' editing')
+    taskClasses.push('editing')
   }
 
   if (isDone) {
     taskClasses.push('completed')
   }
 
+  if (isVisible) {
+    taskClasses.push('visible')
+  }
+
   return (
-    <li className={taskClasses}>
+    <li className={taskClasses.join(' ')}>
       <div className="view">
-        <input className="toggle" type="checkbox" id={id} onClick={() => onClickDone()} />
+        <input className="toggle" type="checkbox" defaultChecked={isDone} id={id} onClick={() => onClickDone()} />
         <label htmlFor={id}>
           <span className="description">{text}</span>
           <span className="created">{created}</span>

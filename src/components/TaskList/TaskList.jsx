@@ -3,8 +3,8 @@ import React from 'react'
 
 import Task from '../Task/Task'
 
-export default function TaskList({ taskList, onClickDone, onClickEdit, onClickDelete }) {
-  const tasks = taskList.map((task, idx) => {
+export default function TaskList({ tasksFiltered, onClickDone, onClickEdit, onClickDelete }) {
+  const tasks = tasksFiltered.map((task, idx) => {
     return (
       <Task
         key={idx}
