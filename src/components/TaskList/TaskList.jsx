@@ -3,15 +3,16 @@ import React from 'react'
 
 import Task from '../Task/Task'
 
-export default function TaskList({ tasksFiltered, onClickDone, onClickEdit, onClickDelete }) {
-  const tasks = tasksFiltered.map((task, idx) => {
+export default function TaskList({ filtered, taskEdit, onClickDone, onClickEdit, onClickDelete }) {
+  const tasks = filtered.map((task) => {
     return (
       <Task
-        key={idx}
+        key={task.id}
         {...task}
-        onClickDone={() => onClickDone(idx)}
-        onClickEdit={() => onClickEdit(idx)}
-        onClickDelete={() => onClickDelete(idx)}
+        taskEdit={taskEdit}
+        onClickDone={() => onClickDone(task.id)}
+        taskEditToggle={() => onClickEdit(task.id)}
+        onClickDelete={() => onClickDelete(task.id)}
       />
     )
   })
