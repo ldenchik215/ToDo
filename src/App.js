@@ -18,7 +18,7 @@ export default function App() {
       text: 'Editing task',
       created: new Date(2025, 1),
       isDone: false,
-      isEditing: true,
+      isEditing: false,
       id: 1,
     },
     {
