@@ -1,5 +1,5 @@
 /*eslint no-unused-vars: "warn"*/
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import NewTaskForm from './components/NewTaskForm/NewTaskForm'
 import TaskList from './components/TaskList/TaskList'
@@ -8,47 +8,56 @@ import Footer from './components/Footer/Footer'
 export default function App() {
   const [taskList, setTaskList] = useState([
     {
-      taskClass: 'completed',
       text: 'Completed task',
-      created: 'created 17 seconds ago',
+      created: new Date(2024, 5),
       isDone: true,
       isEditing: false,
       id: 0,
     },
     {
-      taskClass: 'editing',
       text: 'Editing task',
-      created: 'created 17 seconds ago',
+      created: new Date(2025, 1),
       isDone: false,
       isEditing: true,
       id: 1,
     },
     {
-      taskClass: '',
       text: 'Active task',
-      created: 'created 5 minutes ago',
+      created: new Date(2024, 1),
       isDone: false,
       isEditing: false,
       id: 2,
     },
   ])
 
-  const [filter, setFilter] = useState('all')
+  const [filtered, setFiltered] = useState(taskList)
+  const [filterStatus, setFilterStatus] = useState('all')
 
-  const tasksFiltered = taskList.filter((task) => {
-    if (filter === 'active') return !task.isDone
-    if (filter === 'completed') return task.isDone
-    if (filter === 'all') return task
-    return null
-  })
+  const tasksFilter = useCallback(
+    (status) => {
+      if (status === 'all') {
+        setFilterStatus('all')
+        setFiltered(taskList)
+      } else {
+        const newFiltered = taskList.filter((task) => task.isDone === status)
+        setFilterStatus(status)
+        setFiltered(newFiltered)
+      }
+    },
+    [taskList],
+  )
+
+  useEffect(() => {
+    tasksFilter(filterStatus)
+  }, [filterStatus, tasksFilter])
 
   const toggleTaskState = (id, boolTaskState) => {
     setTaskList(
-      taskList.map((item, i) => {
+      taskList.map((item) => {
         const task = {
           ...item,
         }
-        if (i === id) {
+        if (task.id === id) {
           task[boolTaskState] = !task[boolTaskState]
         }
         return task
@@ -60,16 +69,58 @@ export default function App() {
     toggleTaskState(id, 'isDone')
   }
 
-  const taskEdit = (id) => {
+  const taskEditToggle = (id) => {
     toggleTaskState(id, 'isEditing')
   }
 
   const taskDeleted = (id) => {
-    setTaskList(taskList.filter((item, i) => i !== id))
+    setTaskList(taskList.filter((item) => item.id !== id))
   }
 
   const deleteComleeted = () => {
     setTaskList(taskList.filter((item) => !item.isDone))
+  }
+
+  const taskAdd = (text) => {
+    if (text.trim() === '') return
+    const newTask = {
+      text: text.trim(),
+      created: Date.now(),
+      isDone: false,
+      isEditing: false,
+      id: Date.now(),
+    }
+
+    setTaskList([...taskList, newTask])
+  }
+
+  const taskEdit = (id, inputVal) => {
+    setTaskList(
+      taskList.map((item) => {
+        const task = {
+          ...item,
+        }
+        if (item.id === id) {
+          task.text = inputVal.trim()
+          task.isEditing = false
+        }
+        return task
+      }),
+    )
+  }
+
+  const handleKeyDown = (input, setInput, e) => {
+    if (e.key === 'Enter') {
+      taskAdd(input)
+      setInput('')
+      e.target.value = ''
+      e.target.blur()
+    }
+    if (e.key === 'Escape') {
+      setInput('')
+      e.target.value = ''
+      e.target.blur()
+    }
   }
 
   return (
@@ -77,21 +128,21 @@ export default function App() {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm />
+          <NewTaskForm handleKeyDown={handleKeyDown} />
         </header>
         <section className="main">
           <TaskList
-            taskList={taskList}
-            tasksFiltered={tasksFiltered}
+            filtered={filtered}
+            taskEdit={taskEdit}
             onClickDone={(id) => taskDoneToggle(id)}
-            onClickEdit={(id) => taskEdit(id)}
+            onClickEdit={(id) => taskEditToggle(id)}
             onClickDelete={(id) => taskDeleted(id)}
           />
           <Footer
             deleteComleeted={deleteComleeted}
-            filter={filter}
-            setFilter={setFilter}
+            tasksFilter={tasksFilter}
             tasksLeft={taskList.filter((task) => !task.isDone).length}
+            filterStatus={filterStatus}
           />
         </section>
       </section>

@@ -1,21 +1,35 @@
-export default function TaskFilter({ filter, setFilter }) {
+export default function TaskFilter({ tasksFilter, filterStatus = 'all' }) {
   return (
     <ul className="filters">
       <li>
-        <button className={filter === 'all' ? 'selected' : null} type="button" onClick={() => setFilter('all')}>
+        <button
+          className={filterStatus === 'all' ? 'selected' : null}
+          type="button"
+          onClick={() => {
+            tasksFilter('all')
+          }}
+        >
           All
         </button>
       </li>
       <li>
-        <button className={filter === 'active' ? 'selected' : null} type="button" onClick={() => setFilter('active')}>
+        <button
+          className={filterStatus === false ? 'selected' : null}
+          type="button"
+          onClick={() => {
+            tasksFilter(false)
+          }}
+        >
           Active
         </button>
       </li>
       <li>
         <button
-          className={filter === 'completed' ? 'selected' : null}
+          className={filterStatus === true ? 'selected' : null}
           type="button"
-          onClick={() => setFilter('completed')}
+          onClick={() => {
+            tasksFilter(true)
+          }}
         >
           Completed
         </button>
