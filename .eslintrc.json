@@ -14,7 +14,7 @@
     "plugin:import/warnings",
     "airbnb",
     "airbnb/hooks",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
@@ -26,13 +26,13 @@
   },
   "plugins": ["react", "prettier", "import"],
   "rules": {
-    "indent": ["error", 2],
     "prettier/prettier": [
       "warn",
       {
         "endOfLine": "auto"
       }
     ],
+    "no-unused-vars": [1, {}],
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
@@ -41,7 +41,7 @@
     "import/no-unresolved": [2, { "caseSensitive": false }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-one-expression-per-line": "off",
-    "spaced-comment": ["error", "never"],
+    "spaced-comment": ["warn", "never"],
     "react/no-array-index-key": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "jsx-a11y/label-has-associated-control": [
@@ -54,13 +54,8 @@
         "depth": 3
       }
     ],
-    "object-curly-newline": [
-      "warn",
-      {
-        "ObjectExpression": "always",
-        "ObjectPattern": { "multiline": true }
-      }
-    ],
+    "jsx-a11y/no-autofocus": "off",
+    "object-curly-newline": "off",
     "react/state-in-constructor": [1, "never"],
     "import/order": [
       2,

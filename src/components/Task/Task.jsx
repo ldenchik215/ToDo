@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
+import Timer from './Timer'
+
 export default function Task({
   text,
+  time,
+  isRunning,
   created,
   isEditing,
   isDone,
   id,
-  onClickDone,
-  taskEditToggle,
   onClickDelete,
   taskEdit,
+  toggleTaskState,
 }) {
   const [input, setInput] = useState(text)
   const [inputCache, setInputCache] = useState(input)
@@ -30,26 +33,42 @@ export default function Task({
     setFn(inputVal.trim())
   }
 
+  const cancelEdit = (e) => {
+    changeInputValue(e, inputCache, setInput)
+    toggleTaskState(id, 'isEditing')
+  }
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       changeInputValue(e, input, setInputCache)
       taskEdit(id, input)
     }
     if (e.key === 'Escape') {
-      changeInputValue(e, inputCache, setInput)
-      taskEditToggle()
+      cancelEdit(e)
     }
   }
 
   return (
     <li className={taskClasses.join(' ')}>
       <div className="view">
-        <input className="toggle" type="checkbox" checked={isDone} id={id} onChange={() => onClickDone()} />
+        <input
+          className="toggle"
+          type="checkbox"
+          checked={isDone}
+          id={id}
+          onChange={() => toggleTaskState(id, 'isDone')}
+        />
         <label htmlFor={id}>
-          <span className="description">{text}</span>
-          <span className="created">created {formatDistanceToNow(new Date(created), { addSuffix: true })}</span>
+          <span className="title">{text}</span>
+          <Timer time={time} toggleTaskState={toggleTaskState} id={id} isRunning={isRunning} />
+          <span className="description">created {formatDistanceToNow(new Date(created), { addSuffix: true })}</span>
         </label>
-        <button className="icon icon-edit" type="button" aria-label="Edit task" onClick={taskEditToggle} />
+        <button
+          className="icon icon-edit"
+          type="button"
+          aria-label="Edit task"
+          onClick={() => toggleTaskState(id, 'isEditing')}
+        />
         <button className="icon icon-destroy" type="button" aria-label="Delete task" onClick={onClickDelete} />
       </div>
       {isEditing && (
@@ -58,7 +77,9 @@ export default function Task({
           className="edit"
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
+          onBlur={cancelEdit}
           value={input}
+          autoFocus
         />
       )}
     </li>
