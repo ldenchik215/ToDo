@@ -74,6 +74,13 @@ const reducer = (state, action) => {
         task.id === action.payload.id && task.isRunning ? { ...task, time: Math.max(task.time - 1, 0) } : task,
       )
 
+    case 'TIMER_RESET':
+      return state.map((task) =>
+        task.id === action.payload.id
+          ? { ...task, isRunning: false, isDone: !task[action.payload.boolTaskState] }
+          : task,
+      )
+
     default:
       throw new Error()
   }
@@ -95,14 +102,28 @@ export default function App() {
     }
   }
 
-  const toggleTaskState = (id, boolTaskState) => {
+  const timerReset = (id, boolTaskState) => {
     dispatch({
-      type: 'TASK_TOGGLE_STATE',
+      type: 'TIMER_RESET',
       payload: {
         id,
         boolTaskState,
       },
     })
+  }
+
+  const toggleTaskState = (id, boolTaskState) => {
+    if (boolTaskState === 'isDone') {
+      timerReset(id, boolTaskState)
+    } else {
+      dispatch({
+        type: 'TASK_TOGGLE_STATE',
+        payload: {
+          id,
+          boolTaskState,
+        },
+      })
+    }
   }
 
   const taskDeleted = (id) => {
