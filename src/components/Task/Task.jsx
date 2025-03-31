@@ -60,7 +60,7 @@ export default function Task({
         />
         <label htmlFor={id}>
           <span className="title">{text}</span>
-          <Timer time={time} toggleTaskState={toggleTaskState} id={id} isRunning={isRunning} />
+          <Timer time={time} toggleTaskState={toggleTaskState} id={id} isRunning={isRunning} isDone={isDone} />
           <span className="description">created {formatDistanceToNow(new Date(created), { addSuffix: true })}</span>
         </label>
         <button
