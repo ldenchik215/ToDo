@@ -58,7 +58,7 @@ export default function Task({
           id={id}
           onChange={() => toggleTaskState(id, 'isDone')}
         />
-        <label htmlFor={id}>
+        <label>
           <span className="title">{text}</span>
           <Timer time={time} toggleTaskState={toggleTaskState} id={id} isRunning={isRunning} isDone={isDone} />
           <span className="description">created {formatDistanceToNow(new Date(created), { addSuffix: true })}</span>
